@@ -1,0 +1,28 @@
+server:
+  port: 8080
+logging:
+  level:
+    com.example.blogcounter: DEBUG
+
+wordpress:
+  api:
+#    base-url: https://internate.org/wp-json/wp/v2
+    base-url: https://thekey.academy/wp-json/wp/v2
+    fetch-interval: 10000
+    posts-per-page: 10
+
+# Cache Configuration
+spring:
+  application:
+    name: blog-word-counter
+  cache:
+    cache-names: posts,wordCounts
+  caffeine:
+    spec:
+      maximumSize: 100
+      expireAfterWrite: 300s
+
+# Optional: Redis Configuration (wenn Redis verwendet werden soll)
+#spring.cache.type=redis
+#spring.redis.host=localhost
+#spring.redis.port=6379

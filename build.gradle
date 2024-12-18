@@ -1,0 +1,7 @@
+allprojects {
+    repositories {
+        gradlePluginPortal() // Plugin-Repositories hinzufügen
+        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' } // Gradle Plugin Repository
+    }
+}
