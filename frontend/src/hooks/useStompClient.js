@@ -38,6 +38,23 @@ export function useStompClient({ onWordCount }) {
             setConnectionStatus('error');
         };
 
+        // Handle WebSocket close event
+        client.webSocketFactory = () => {
+            const socket = new WebSocket('ws://localhost:8080/ws/websocket');
+
+            socket.onclose = () => {
+                console.warn('WebSocket closed unexpectedly');
+                setConnectionStatus('disconnected');
+            };
+
+            socket.onerror = (error) => {
+                console.error('WebSocket error:', error);
+                setConnectionStatus('error');
+            };
+
+            return socket;
+        };
+
         // Start the connection
         client.activate();
 

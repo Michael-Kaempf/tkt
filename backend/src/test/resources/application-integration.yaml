@@ -1,0 +1,11 @@
+server:
+  port: 0  # Random port for testing
+
+spring:
+  application:
+    name: blog-counter-test
+
+logging:
+  level:
+    com.example.blogcounter: DEBUG
+    org.springframework.web.socket: DEBUG

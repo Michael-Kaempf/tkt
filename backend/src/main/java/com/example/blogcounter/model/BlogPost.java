@@ -1,11 +1,12 @@
 package com.example.blogcounter.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-@Data
 @Builder
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BlogPost {
     private Long id;
     @JsonProperty("content")
@@ -14,6 +15,8 @@ public class BlogPost {
 
     @Builder
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Content {
         private String rendered;
     }

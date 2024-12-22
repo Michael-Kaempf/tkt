@@ -5,6 +5,7 @@ import com.example.blogcounter.model.WordCount;
 import com.example.blogcounter.service.BlogFetcherService;
 import com.example.blogcounter.service.WordCountBroadcastService;
 import com.example.blogcounter.service.WordCounterService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -36,24 +37,35 @@ class BlogFetchSchedulerTest {
     @InjectMocks
     private BlogFetchScheduler blogFetchScheduler;
 
+    private AutoCloseable mocks;
+
     @BeforeEach
     void setUp() {
         // Initialize mocks
-        MockitoAnnotations.openMocks(this);
+        mocks = MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterEach
+    void tearDown() throws Exception {
+        if (mocks != null) {
+            mocks.close();
+        }
     }
 
     @Test
     void fetchAndProcessPosts_Success() {
         // Arrange: Set up the mock behavior
         String testContent = "<p>Test content</p>";
-        List<BlogPost> blogPosts = Collections.singletonList(
-                BlogPost.builder()
-                        .id(1L)
-                        .date(DateTimeFormatter.ISO_INSTANT.format(Instant.now()))
-                        .content(BlogPost.Content.builder()
-                                .rendered(testContent)
-                                .build())
-                        .build());
+        var content = BlogPost.Content.builder()
+                .rendered(testContent)
+                .build();
+        var blogPost =  BlogPost.builder()
+                .id(1L)
+                .date(DateTimeFormatter.ISO_INSTANT.format(Instant.now()))
+                .content(content)
+                .build();
+
+        List<BlogPost> blogPosts = Collections.singletonList(blogPost);
 
         when(blogFetcherService.fetchLatestPosts())
                 .thenReturn(blogPosts); // Mocked Blog Posts

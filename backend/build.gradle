@@ -30,11 +30,24 @@ dependencies {
     testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
     testImplementation 'org.assertj:assertj-core:3.24.2'
     testImplementation 'org.awaitility:awaitility:4.2.0'
+//    testImplementation 'org.testcontainers:testcontainers:1.19.3'
+//    testImplementation 'org.testcontainers:junit-jupiter:1.19.3'
+//    testImplementation 'org.wiremock:wiremock-standalone:3.3.1'
 
-    compileOnly("org.projectlombok:lombok")
-    annotationProcessor("org.projectlombok:lombok")
-    testCompileOnly("org.projectlombok:lombok")
-    testAnnotationProcessor("org.projectlombok:lombok")
+    // MockWebServer für API-Mocking
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.11.0'
+
+    // AssertJ für Fluent Assertions
+    testImplementation 'org.assertj:assertj-core:3.24.2'
+
+    // WebSocket Test-Client
+    testImplementation 'org.springframework:spring-websocket'
+    testImplementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 test {

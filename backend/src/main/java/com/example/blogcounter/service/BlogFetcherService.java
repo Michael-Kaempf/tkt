@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BlogFetcherService {
     private final WordPressConfig config;
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
     private Instant lastFetchTime = Instant.EPOCH.plusSeconds(1);
 
     @Cacheable(value = "posts", key = "#root.method.name + '_' + #lastFetchTime")
