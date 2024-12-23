@@ -34,8 +34,11 @@ jobs:
 
       # 4. Build Docker Image for Backend
       - name: Build Backend Docker Image
+        env:
+          REPO_OWNER_LOWERCASE: ${{ github.repository_owner }}
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner }}/backend:latest ./backend
+          REPO_OWNER_LOWERCASE=$(echo $REPO_OWNER_LOWERCASE | tr '[:upper:]' '[:lower:]')
+          docker build -t ghcr.io/$REPO_OWNER_LOWERCASE/backend:latest ./backend
 
       # 5. Push Backend Docker Image
       - name: Push Backend Docker Image
@@ -44,8 +47,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - run: |
-          docker push ghcr.io/${{ github.repository_owner }}/backend:latest
+      - env:
+          REPO_OWNER_LOWERCASE: ${{ github.repository_owner }}
+        run: |
+          REPO_OWNER_LOWERCASE=$(echo $REPO_OWNER_LOWERCASE | tr '[:upper:]' '[:lower:]')
+          docker push ghcr.io/$REPO_OWNER_LOWERCASE/backend:latest
 
   frontend-build:
     name: Build Frontend
