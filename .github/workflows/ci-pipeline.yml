@@ -104,9 +104,9 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-        env:
+      - env:
           REPO_OWNER_LOWERCASE: ${{ github.repository_owner }}
-      - run: |
+        run: |
           REPO_OWNER_LOWERCASE=$(echo $REPO_OWNER_LOWERCASE | tr '[:upper:]' '[:lower:]')
           docker push ghcr.io/$REPO_OWNER_LOWERCASE/frontend:latest
 
