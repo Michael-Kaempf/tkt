@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - "*" # Für Pull Requests auf alle Branches
+  workflow_dispatch: # Manuelles Triggern erlauben
 
 jobs:
   build:
@@ -14,34 +15,57 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout Repository
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      # 2. Set up Java for Backend
       - name: Set up Java
         uses: actions/setup-java@v3
         with:
           java-version: '21'
           distribution: 'temurin'
 
+      # 3. Build Backend
       - name: Build Backend with Gradle
         run: |
           cd backend
-          gradle build
+          gradlew build
 
+      # 4. Set up Node.js for Frontend
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # 5. Cache Node.js modules
       - name: Cache Node.js modules
         uses: actions/cache@v3
         with:
           path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/frontend/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Build Frontend
+      # 6. Install Frontend Dependencies
+      - name: Install Frontend Dependencies
         run: |
           cd frontend
           npm install
+
+      # 7. Verify react-scripts Installation
+      - name: Verify react-scripts Installation
+        run: |
+          cd frontend
+          npm list react-scripts
+
+      # 8. Build Frontend
+      - name: Build Frontend
+        run: |
+          cd frontend
           npm run build
 
+      # 9. Log in to GitHub Container Registry
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -49,16 +73,19 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      # 10. Build Docker Images
       - name: Build Docker Images
         run: |
           docker build -t ghcr.io/${{ github.repository_owner }}/backend:latest ./backend
           docker build -t ghcr.io/${{ github.repository_owner }}/frontend:latest ./frontend
 
+      # 11. Push Docker Images to GHCR
       - name: Push Docker Images
         run: |
           docker push ghcr.io/${{ github.repository_owner }}/backend:latest
           docker push ghcr.io/${{ github.repository_owner }}/frontend:latest
 
+      # 12. Deploy with Docker Compose
       - name: Deploy with Docker Compose
         env:
           BACKEND_IMAGE: ghcr.io/${{ github.repository_owner }}/backend:latest
