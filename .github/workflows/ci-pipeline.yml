@@ -26,7 +26,7 @@ jobs:
       - name: Build Backend with Gradle
         run: |
           cd backend
-          ./gradlew build
+          gradle build
 
       - name: Build Frontend
         run: |
