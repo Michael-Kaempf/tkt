@@ -91,8 +91,11 @@ jobs:
 
       # 7. Build Docker Image for Frontend
       - name: Build Frontend Docker Image
+        env:
+          REPO_OWNER_LOWERCASE: ${{ github.repository_owner }}
         run: |
-          docker build -t ghcr.io/${{ github.repository_owner | toLowerCase }}/frontend:latest ./frontend
+          REPO_OWNER_LOWERCASE=$(echo $REPO_OWNER_LOWERCASE | tr '[:upper:]' '[:lower:]')
+          docker build -t ghcr.io/$REPO_OWNER_LOWERCASE/frontend:latest ./frontend
 
       # 8. Push Frontend Docker Image
       - name: Push Frontend Docker Image
@@ -101,8 +104,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          REPO_OWNER_LOWERCASE: ${{ github.repository_owner }}
       - run: |
-          docker push ghcr.io/${{ github.repository_owner | toLowerCase }}/frontend:latest
+          REPO_OWNER_LOWERCASE=$(echo $REPO_OWNER_LOWERCASE | tr '[:upper:]' '[:lower:]')
+          docker push ghcr.io/$REPO_OWNER_LOWERCASE/frontend:latest
 
   deploy:
     name: Deploy Application
