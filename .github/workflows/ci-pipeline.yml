@@ -217,23 +217,24 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  deploy:
-    name: Deploy Application
+#  deploy:
+#    name: Deploy Application
 #    needs:
-#      - backend-build
-#      - frontend-build
-    runs-on: ubuntu-latest
-
-    steps:
-      # 1. Checkout Repository
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      # 2. Deploy with Docker Compose
-      - name: Deploy with Docker Compose
-        env:
-          BACKEND_IMAGE: ghcr.io/${{ github.repository_owner }}/backend:latest
-          FRONTEND_IMAGE: ghcr.io/${{ github.repository_owner }}/frontend:latest
-        run: |
-          docker-compose down || true
-          docker-compose up -d
+#      - build
+##      - backend-build
+##      - frontend-build
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      # 1. Checkout Repository
+#      - name: Checkout Code
+#        uses: actions/checkout@v3
+#
+#      # 2. Deploy with Docker Compose
+#      - name: Deploy with Docker Compose
+#        env:
+#          BACKEND_IMAGE: ghcr.io/${{ github.repository_owner }}/backend:latest
+#          FRONTEND_IMAGE: ghcr.io/${{ github.repository_owner }}/frontend:latest
+#        run: |
+#          docker-compose down || true
+#          docker-compose up -d

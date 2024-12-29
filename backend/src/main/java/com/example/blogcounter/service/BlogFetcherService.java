@@ -33,7 +33,7 @@ public class BlogFetcherService {
     private final RestTemplate restTemplate;
     private Instant lastFetchTime = Instant.EPOCH.plusSeconds(1);
 
-    @Cacheable(value = "posts", key = "#root.method.name + '_' + #lastFetchTime")
+//    @Cacheable(value = "posts", key = "#root.method.name + '_' + #lastFetchTime")
     public List<BlogPost> fetchLatestPosts() {
         try {
             String url = String.format("%s/posts?after=%s&per_page=%d", //&_fields=content.rendered,date",
@@ -47,7 +47,7 @@ public class BlogFetcherService {
                     null,
                     new ParameterizedTypeReference<List<BlogPost>>() {}
             );
-//            LOG.info(MessageFormat.format("Fetched blog posts: {0}", response.getBody()));
+            LOG.debug("Fetched blog posts: {}", response.getBody());
 
             lastFetchTime = Instant.now();
             return response.getBody();
@@ -57,7 +57,7 @@ public class BlogFetcherService {
         }
     }
 
-    @CacheEvict(value = "posts", allEntries = true)
+//    @CacheEvict(value = "posts", allEntries = true)
     public void clearCache() {
         LOG.info("Clearing posts cache");
     }

@@ -18,14 +18,11 @@ public class BlogFetchScheduler {
 
     @Scheduled(fixedRateString = "${wordpress.api.fetch-interval}")
     public void fetchAndProcessPosts() {
-        try {
-            var posts = blogFetcherService.fetchLatestPosts();
-            if(!posts.isEmpty()) {
-                var wordCount = wordCounterService.processContent(posts);
-                broadcastService.broadcastWordCount(wordCount);
-            }
-        } catch (Exception e) {
-            LOG.error("Error in fetch and process cycle: ", e);
+        LOG.info("Fetching blog posts");
+        var posts = blogFetcherService.fetchLatestPosts();
+        if(!posts.isEmpty()) {
+            var wordCount = wordCounterService.processContent(posts);
+            broadcastService.broadcastWordCount(wordCount);
         }
     }
 }
