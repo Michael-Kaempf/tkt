@@ -66,10 +66,21 @@ jacocoTestReport {
     }
 }
 
-task copyFrontendBuild(type: Copy) {
-    dependsOn ':frontend:buildFrontend'
-    from '../frontend/src/build'
-    into 'src/main/resources/static'
-}
-
-processResources.dependsOn copyFrontendBuild
+//task copyFrontendBuild(type: Copy) {
+//    dependsOn ':frontend:buildFrontend'
+//    from '../frontend/src/build'
+//    into 'src/main/resources/static'
+//}
+//
+//processResources.dependsOn copyFrontendBuild
+//
+//// Frontend-Build optional machen
+//if (project.hasProperty('includeFrontend')) {
+//    task copyFrontendBuild(type: Copy) {
+//        dependsOn ':frontend:buildFrontend'
+//        from '../frontend/build'
+//        into 'src/main/resources/static'
+//    }
+//
+//    processResources.dependsOn copyFrontendBuild
+//}

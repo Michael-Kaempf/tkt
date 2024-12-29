@@ -1,7 +1,23 @@
 allprojects {
     repositories {
-        gradlePluginPortal() // Plugin-Repositories hinzufügen
+        gradlePluginPortal()
         mavenCentral()
-        maven { url 'https://plugins.gradle.org/m2/' } // Gradle Plugin Repository
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+}
+
+project(':backend') {
+    // Warten bis das backend-Projekt konfiguriert ist
+    afterEvaluate {
+        tasks.register('copyFrontendBuild', Copy) {
+            dependsOn ':frontend:buildFrontend'
+            from project(':frontend').file('src/build')
+            into 'src/main/resources/static'
+        }
+
+        // Jetzt ist processResources verfügbar
+        tasks.named('processResources').configure {
+            dependsOn copyFrontendBuild
+        }
     }
 }
