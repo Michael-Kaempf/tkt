@@ -9,7 +9,7 @@ COPY build.gradle settings.gradle ./
 COPY src ./src
 
 # Build application
-RUN ./gradlew build -x test
+RUN gradle build -x test
 
 # Runtime stage
 FROM eclipse-temurin:21-jre
