@@ -124,8 +124,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      BACKEND_IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}/backend
-      FRONTEND_IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}/frontend
+#      BACKEND_IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}/backend
+#      FRONTEND_IMAGE: ghcr.io/${{ github.repository_owner }}/${{ github.repository }}/frontend
+      BACKEND_IMAGE: ghcr.io/${{ github.repository_owner != '' && github.repository_owner || github.actor }}/tkt/backend
+      FRONTEND_IMAGE: ghcr.io/${{ github.repository_owner != '' && github.repository_owner || github.actor }}/tkt/frontend
 
     steps:
       - uses: actions/checkout@v4
@@ -212,6 +214,9 @@ jobs:
       - name: Set Docker tags
         id: docker-tags
         run: |
+          # Convert image names to lowercase
+          BACKEND_IMAGE=$(echo "${BACKEND_IMAGE}" | tr '[:upper:]' '[:lower:]')
+          FRONTEND_IMAGE=$(echo "${FRONTEND_IMAGE}" | tr '[:upper:]' '[:lower:]')
           if [[ $GITHUB_REF == refs/tags/* ]]; then
             VERSION=${GITHUB_REF#refs/tags/v}
             echo "version=${VERSION}" >> $GITHUB_OUTPUT
@@ -238,7 +243,8 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
+#          username: ${{ github.repository_owner }}
+          username: ${{ github.repository_owner != '' && github.repository_owner || github.actor }}
           password: ${{ secrets.TOKEN }}
 
 #      # Backend Docker Image
