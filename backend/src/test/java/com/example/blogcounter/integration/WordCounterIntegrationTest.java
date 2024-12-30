@@ -194,7 +194,6 @@ class WordCounterIntegrationTest {
         return path.substring(afterIndex + 6, endIndex);
     }
 
-    @Test
     @Ignore
     void shouldProcessBlogPostsAndSendWordCount() throws Exception {
         // Setup mock WordPress API response
