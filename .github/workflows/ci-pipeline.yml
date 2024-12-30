@@ -169,23 +169,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-frontend-
 
-      # Docker Layer Caching for Backend
-      - name: Cache Backend Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache-backend
-          key: ${{ runner.os }}-buildx-backend-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-backend-
+#      # Docker Layer Caching for Backend
+#      - name: Cache Backend Docker layers
+#        uses: actions/cache@v3
+#        with:
+#          path: /tmp/.buildx-cache-backend
+#          key: ${{ runner.os }}-buildx-backend-${{ github.sha }}
+#          restore-keys: |
+#            ${{ runner.os }}-buildx-backend-
 
-      # Docker Layer Caching for Frontend
-      - name: Cache Frontend Docker layers
-        uses: actions/cache@v3
-        with:
-          path: /tmp/.buildx-cache-frontend
-          key: ${{ runner.os }}-buildx-frontend-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-frontend-
+#      # Docker Layer Caching for Frontend
+#      - name: Cache Frontend Docker layers
+#        uses: actions/cache@v3
+#        with:
+#          path: /tmp/.buildx-cache-frontend
+#          key: ${{ runner.os }}-buildx-frontend-${{ github.sha }}
+#          restore-keys: |
+#            ${{ runner.os }}-buildx-frontend-
 
       - name: Build Frontend
         working-directory: frontend/src
@@ -310,13 +310,15 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta-frontend.outputs.tags }}
           labels: ${{ steps.meta-frontend.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache-frontend
-          cache-to: type=local,dest=/tmp/.buildx-cache-frontend-new,mode=max
+#          cache-from: type=local,src=/tmp/.buildx-cache-frontend
+#          cache-to: type=local,dest=/tmp/.buildx-cache-frontend-new,mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
-      - name: Move Frontend cache
-        run: |
-          rm -rf /tmp/.buildx-cache-frontend
-          mv /tmp/.buildx-cache-frontend-new /tmp/.buildx-cache-frontend
+#      - name: Move Frontend cache
+#        run: |
+#          rm -rf /tmp/.buildx-cache-frontend
+#          mv /tmp/.buildx-cache-frontend-new /tmp/.buildx-cache-frontend
 
 #  deploy:
 #    name: Deploy Application
