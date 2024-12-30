@@ -281,8 +281,10 @@ jobs:
           file: backend/Dockerfile
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.docker-tags.outputs.backend_tags }}
-          cache-from: type=local,src=/tmp/.buildx-cache-backend
-          cache-to: type=local,dest=/tmp/.buildx-cache-backend-new,mode=max
+#          cache-from: type=local,src=/tmp/.buildx-cache-backend
+#          cache-to: type=local,dest=/tmp/.buildx-cache-backend-new,mode=max
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
       - name: Move Backend cache
         run: |
