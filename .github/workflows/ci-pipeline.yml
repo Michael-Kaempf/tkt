@@ -287,10 +287,10 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Move Backend cache
-        run: |
-          rm -rf /tmp/.buildx-cache-backend
-          mv /tmp/.buildx-cache-backend-new /tmp/.buildx-cache-backend
+#      - name: Move Backend cache
+#        run: |
+#          rm -rf /tmp/.buildx-cache-backend
+#          mv /tmp/.buildx-cache-backend-new /tmp/.buildx-cache-backend
 
       # Frontend Docker Image
       - name: Extract metadata for Frontend Docker
