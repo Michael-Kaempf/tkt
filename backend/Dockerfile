@@ -1,38 +1,17 @@
-# Build stage
-FROM eclipse-temurin:21-jdk AS builder
-WORKDIR /app
-
-# Copy gradle file
-COPY build.gradle ./
-
-# Copy source code
-COPY src ./src
-
-# Build application
-RUN gradle build -x test
-
 # Runtime stage
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
-# Install common tools and create non-root user
-RUN apt-get update && apt-get install -y \
-    curl \
-    && rm -rf /var/lib/apt/lists/* \
-    && useradd -m javauser
+# Kopiere das bereits gebaute JAR aus dem Build-Prozess
+COPY build/libs/*.jar app.jar
 
-# Copy JAR from builder stage
-COPY --from=builder /app/build/libs/*.jar app.jar
-
-# Use non-root user
-USER javauser
-
-# Set entrypoint
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
-
-# Expose port
 EXPOSE 8080
 
-# Health check
+# Gesundheitscheck für Container-Orchestrierung
 HEALTHCHECK --interval=30s --timeout=3s \
   CMD curl -f http://localhost:8080/actuator/health || exit 1
+
+# JVM-Optimierungen für Container
+ENV JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]

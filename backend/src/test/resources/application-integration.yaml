@@ -9,3 +9,4 @@ logging:
   level:
     com.example.blogcounter: DEBUG
     org.springframework.web.socket: DEBUG
+    org.springframework.messaging.simp.stomp: DEBUG

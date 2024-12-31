@@ -6,18 +6,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.jsoup.Jsoup;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Arrays;
 
-import java.util.List;
+import java.util.*;
 
 @Service
 @Slf4j
 public class WordCounterService {
 
-    @Cacheable(value = "wordCounts", key = "#posts.hashCode()")
+//    @Cacheable(value = "wordCounts", key = "#posts.hashCode()")
     public WordCount processContent(List<BlogPost> posts) {
+        LOG.info("Process blog posts");
+        if(posts.isEmpty()) {
+            LOG.debug("No blog posts");
+            return new WordCount(Collections.emptyMap());
+        }
         Map<String, Integer> wordFrequencies = new HashMap<>();
 
         posts.stream()

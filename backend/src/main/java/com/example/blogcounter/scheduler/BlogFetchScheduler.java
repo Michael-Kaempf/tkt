@@ -16,13 +16,11 @@ public class BlogFetchScheduler {
     private final WordCounterService wordCounterService;
     private final WordCountBroadcastService broadcastService;
 
-    @Scheduled(fixedRateString = "${wordpress.api.fetch-interval}")
+    @Scheduled(initialDelayString = "${wordpress.api.initial-delay}", fixedRateString = "${wordpress.api.fetch-interval}")
     public void fetchAndProcessPosts() {
         LOG.info("Fetching blog posts");
         var posts = blogFetcherService.fetchLatestPosts();
-        if(!posts.isEmpty()) {
-            var wordCount = wordCounterService.processContent(posts);
-            broadcastService.broadcastWordCount(wordCount);
-        }
+        var wordCount = wordCounterService.processContent(posts);
+        broadcastService.broadcastWordCount(wordCount);
     }
 }

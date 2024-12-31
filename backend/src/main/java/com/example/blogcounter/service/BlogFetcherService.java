@@ -35,6 +35,7 @@ public class BlogFetcherService {
 
 //    @Cacheable(value = "posts", key = "#root.method.name + '_' + #lastFetchTime")
     public List<BlogPost> fetchLatestPosts() {
+        LOG.info("Fetching latest blog posts");
         try {
             String url = String.format("%s/posts?after=%s&per_page=%d", //&_fields=content.rendered,date",
                     config.getBaseUrl(),
@@ -47,7 +48,7 @@ public class BlogFetcherService {
                     null,
                     new ParameterizedTypeReference<List<BlogPost>>() {}
             );
-            LOG.debug("Fetched blog posts: {}", response.getBody());
+            LOG.info("Fetched blog posts: {}", response.getBody());
 
             lastFetchTime = Instant.now();
             return response.getBody();

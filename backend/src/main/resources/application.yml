@@ -8,6 +8,7 @@ wordpress:
   api:
 #    base-url: https://internate.org/wp-json/wp/v2
     base-url: https://thekey.academy/wp-json/wp/v2
+    initial-delay: 5000
     fetch-interval: 10000
     posts-per-page: 10
 
