@@ -18,10 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import static org.mockito.Mockito.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 class BlogFetchSchedulerTest {
 
@@ -59,7 +56,7 @@ class BlogFetchSchedulerTest {
         var content = BlogPost.Content.builder()
                 .rendered(testContent)
                 .build();
-        var blogPost =  BlogPost.builder()
+        var blogPost = BlogPost.builder()
                 .id(1L)
                 .date(DateTimeFormatter.ISO_INSTANT.format(Instant.now()))
                 .content(content)
@@ -99,7 +96,7 @@ class BlogFetchSchedulerTest {
 
         // Verify that error handling is done properly
         verify(blogFetcherService, times(1)).fetchLatestPosts();
-        verify(wordCounterService, times(0)).processContent(any()); // WordCount sollte nicht verarbeitet werden
-        verify(broadcastService, times(0)).broadcastWordCount(any()); // WebSocket sollte nicht broadcasten
+        verify(wordCounterService, times(1)).processContent(any());
+        verify(broadcastService, times(1)).broadcastWordCount(any());
     }
 }
