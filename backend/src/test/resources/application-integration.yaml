@@ -4,6 +4,14 @@ server:
 spring:
   application:
     name: blog-counter-test
+  task:
+    scheduling:
+      enabled: false
+    execution:
+      enabled: false
+
+scheduler:
+  enabled: false
 
 logging:
   level:

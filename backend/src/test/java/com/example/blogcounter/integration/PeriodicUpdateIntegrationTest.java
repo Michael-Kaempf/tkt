@@ -34,14 +34,7 @@ import java.util.concurrent.TimeUnit;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
-@SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = {
-                "spring.task.scheduling.enabled=false",
-                "spring.task.execution.enabled=false",
-                "scheduler.enabled=false"
-        }
-)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("integration")
 class PeriodicUpdateIntegrationTest {
 
@@ -66,7 +59,6 @@ class PeriodicUpdateIntegrationTest {
     static void registerProperties(DynamicPropertyRegistry registry) {
         String baseUrl = "http://localhost:" + mockWebServer.getPort() + "/wp-json/wp/v2";
         registry.add("wordpress.api.base-url", () -> baseUrl);
-        registry.add("wordpress.api.posts-per-page", () -> "10");
     }
 
     @BeforeEach

@@ -35,15 +35,16 @@ class WordCountBroadcastIntegrationTest {
         WebSocketStompClient stompClient = new WebSocketStompClient(new StandardWebSocketClient());
         stompClient.setMessageConverter(new MappingJackson2MessageConverter());
 
-        // CompletableFuture, um die Nachricht zu empfangen
+        // CompletableFuture for receiving messages
         CompletableFuture<WordCount> completableFuture = new CompletableFuture<>();
 
-        // Verbinde zum WebSocket-Endpunkt
+        // Connect to WebSocket endpoint
         var session = stompClient
-                .connectAsync("ws://localhost:" + port + "/ws/websocket", new StompSessionHandlerAdapter() {})
+                .connectAsync("ws://localhost:" + port + "/ws/websocket", new StompSessionHandlerAdapter() {
+                })
                 .get(5, TimeUnit.SECONDS);
 
-        // Abonniere `/topic/wordcount`
+        // Subscribe to `/topic/wordcount`
         session.subscribe("/topic/wordcount", new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {
@@ -56,17 +57,17 @@ class WordCountBroadcastIntegrationTest {
             }
         });
 
-        // Erstelle eine Testnachricht und sende sie über den Service
+        // Create test message and send it through the service
         WordCount wordCount = new WordCount(Map.of(
                 "test", 2,
                 "broadcast", 1
         ));
         wordCountBroadcastService.broadcastWordCount(wordCount);
 
-        // Warte auf die empfangene Nachricht
+        // await the receiving message
         WordCount receivedWordCount = completableFuture.get(10, TimeUnit.SECONDS);
 
-        // Überprüfe, ob die Nachricht korrekt empfangen wurde
+        // check, if received correctly
         assertThat(receivedWordCount.getWordFrequencies())
                 .containsEntry("test", 2)
                 .containsEntry("broadcast", 1);

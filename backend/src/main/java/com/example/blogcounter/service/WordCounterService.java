@@ -3,9 +3,8 @@ package com.example.blogcounter.service;
 import com.example.blogcounter.model.BlogPost;
 import com.example.blogcounter.model.WordCount;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.stereotype.Service;
 import org.jsoup.Jsoup;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
@@ -13,10 +12,9 @@ import java.util.*;
 @Slf4j
 public class WordCounterService {
 
-//    @Cacheable(value = "wordCounts", key = "#posts.hashCode()")
     public WordCount processContent(List<BlogPost> posts) {
         LOG.info("Process blog posts");
-        if(posts.isEmpty()) {
+        if (posts.isEmpty()) {
             LOG.debug("No blog posts");
             return new WordCount(Collections.emptyMap());
         }

@@ -51,6 +51,7 @@ class BlogFetchSchedulerTest {
 
     @Test
     void fetchAndProcessPosts_Success() {
+        // given
         // Arrange: Set up the mock behavior
         String testContent = "<p>Test content</p>";
         var content = BlogPost.Content.builder()
@@ -76,9 +77,11 @@ class BlogFetchSchedulerTest {
         when(wordCounterService.processContent(blogPosts))
                 .thenReturn(expectedWordCount);
 
-        // Act: Manuell den Scheduler-Task ausführen
+        // when
+        // Act: trigger scheduler manual
         blogFetchScheduler.fetchAndProcessPosts();
 
+        // then
         // Verify that the methods are called correctly
         verify(blogFetcherService, times(1)).fetchLatestPosts();
         verify(wordCounterService, times(1)).processContent(blogPosts);
@@ -87,13 +90,16 @@ class BlogFetchSchedulerTest {
 
     @Test
     void fetchAndProcessPosts_ErrorHandling() {
-        // Arrange: Simuliere einen Fehler beim Abrufen der Posts
+        // given
+        // Arrange: simulate an error during call of the posts
         when(blogFetcherService.fetchLatestPosts())
                 .thenReturn(Collections.emptyList());
 
-        // Act: Manuell den Scheduler-Task ausführen
+        // when
+        // Act: trigger scheduler manual
         blogFetchScheduler.fetchAndProcessPosts();
 
+        // then
         // Verify that error handling is done properly
         verify(blogFetcherService, times(1)).fetchLatestPosts();
         verify(wordCounterService, times(1)).processContent(any());
