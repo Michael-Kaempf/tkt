@@ -1,0 +1,17 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  scheduling:
+    enabled: false
+
+wordpress:
+  api:
+    baseUrl: http://localhost:${wiremock.server.port}
+
+logging:
+  level:
+    com.example.com.example.blogcounter: DEBUG
+    org.springframework.web.socket: DEBUG
+
+server:
+  port: 0

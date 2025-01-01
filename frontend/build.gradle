@@ -1,0 +1,28 @@
+plugins {
+    id 'com.github.node-gradle.node' version '7.1.0' // Node-Plugin
+}
+
+node {
+    version = '20.10.0'        // Node.js Version
+    npmVersion = '9.0.0'      // npm Version
+    download = true           // Node und npm herunterladen, falls nicht lokal vorhanden
+}
+
+task buildFrontend(type: NpmTask) {
+    description = 'Builds the React frontend using npm'
+    group = 'build'
+    workingDir = file('src')  // Verzeichnis des Frontend-Projekts
+    args = ['run', 'build']  // npm run build ausführen
+}
+
+task cleanFrontend(type: Delete) {
+    delete 'src/frontend/build'  // Löscht das Frontend-Build-Verzeichnis
+}
+
+task build {
+    dependsOn(buildFrontend)  // Build hängt vom buildFrontend-Task ab
+}
+
+task clean {
+    dependsOn(cleanFrontend)  // Clean hängt vom cleanFrontend-Task ab
+}

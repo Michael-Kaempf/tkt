@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  backend:
+    image: backend:local
+    ports:
+      - "8080:8080"
+    build:
+      context: ./backend
+
+  frontend:
+    image: frontend:local
+    ports:
+      - "3000:3000"
+    build:
+      context: ./frontend
